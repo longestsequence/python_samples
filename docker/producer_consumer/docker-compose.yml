@@ -1,0 +1,26 @@
+version: '3'
+services:
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    networks:
+      - messaging_network
+
+  simple_consumer:
+    image: simple_consumer
+    environment:
+      AMQP_URL: 'amqp://rabbitmq?connection_attempts=5&retry_delay=5'
+    networks:
+      - messaging_network
+
+  simple_producer:
+    image: simple_producer
+    environment:
+      AMQP_URL: 'amqp://rabbitmq?connection_attempts=5&retry_delay=5'
+    networks:
+      - messaging_network
+
+networks:
+  messaging_network: {}
